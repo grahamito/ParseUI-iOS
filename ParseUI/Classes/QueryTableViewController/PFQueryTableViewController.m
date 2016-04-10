@@ -141,22 +141,48 @@
     self.loadingView.frame = self.tableView.bounds;
 }
 
+
+ // gc: to fix bug when code was trying to delete object where next page indicator was
+//Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ 
+     // if this is the PaginationCell, don't allow editing.
+     
+     if ([indexPath isEqual:[self _indexPathForPaginationCell]]) {
+         return NO;
+     }
+     else {
+ 
+     return YES;
+     }
+ }
+
+
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     [self.tableView beginUpdates];
 
     // If we're currently showing the pagination cell, we need to hide it during editing.
-    if ([self paginationEnabled] && [self _shouldShowPaginationCell]) {
-        [self.tableView deleteRowsAtIndexPaths:@[ [self _indexPathForPaginationCell] ]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+    
+    // (gc. can we just prevent  edit it instead, to solve transient bug)  canEditRowAtIndexPath?
+    // actually maybe just comment out this stuff. and  rely on editing style for pagination style
+    
+//    if ([self paginationEnabled] && [self _shouldShowPaginationCell]) {
+//        [self.tableView deleteRowsAtIndexPaths:@[ [self _indexPathForPaginationCell] ]
+//                              withRowAnimation:UITableViewRowAnimationAutomatic];
+//    }
 
     [super setEditing:editing animated:animated];
+    
+    // _shouldShowPaginationCell will have been changed by the line above (setEditing) as it depends on it
+    // so only one of these if statements is going to be true for a pass through this method?
 
     // Ensure proper re-insertion of the pagination cell.
-    if ([self paginationEnabled] && [self _shouldShowPaginationCell]) {
-        [self.tableView insertRowsAtIndexPaths:@[ [self _indexPathForPaginationCell] ]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+//    if ([self paginationEnabled] && [self _shouldShowPaginationCell]) {
+//        [self.tableView insertRowsAtIndexPaths:@[ [self _indexPathForPaginationCell] ]
+//                              withRowAnimation:UITableViewRowAnimationAutomatic];
+//    }
 
     [self.tableView endUpdates];
 }
@@ -397,10 +423,12 @@
     // Remove the contents from our local cache so we can give the user immediate feedback.
     [_mutableObjects removeObjectsInArray:objectsToRemove];
     
+    // https://github.com/ParsePlatform/ParseUI-iOS/pull/231/files
+    // commented out thise lines trying to fix crash.
    // [self.tableView deleteRowsAtIndexPaths:indexPaths
      //                     withRowAnimation:animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone];
 
-    [self.tableView reloadData];
+    [self.tableView reloadData];  // gc
 
     for (id obj in objectsToRemove) {
         [allDeletionTasks addObject:[obj deleteInBackground]];

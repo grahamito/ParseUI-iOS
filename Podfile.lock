@@ -20,7 +20,7 @@ PODS:
   - ParseTwitterUtils (1.9.1):
     - Bolts/Tasks (~> 1.5)
     - Parse (~> 1.9)
-  - ParseUI (1.1.7):
+  - ParseUI (1.2.1):
     - Bolts/Tasks (~> 1.3)
     - Parse (~> 1.9)
 
@@ -40,6 +40,6 @@ SPEC CHECKSUMS:
   Parse: 886af46a0a677402f6374bb97ac212e795f70afe
   ParseFacebookUtilsV4: 3cd2d2d69653bad40c8c58131b935c353a0f3f15
   ParseTwitterUtils: 41e8849e37db471e874c6e515190ded19e043dc8
-  ParseUI: c2bcdfbb00330e464b5b773266ae221697a3bb7b
+  ParseUI: a1b9fbc03f1486bb4ba26c8c559eae965c035dc5
 
 COCOAPODS: 0.39.0

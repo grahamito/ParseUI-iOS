@@ -40,9 +40,16 @@
 
     self.title = @"Deletion Table";
     self.pullToRefreshEnabled = YES;
+    
+    // gc
+    self.objectsPerPage = 5;
+    self.paginationEnabled = YES;
 
     return self;
 }
+
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
